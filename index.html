@@ -192,14 +192,16 @@ const BASE_URL = "https://generador-de-firmas.vercel.app";
 
 const config = {
     hb: {
-        nombre: "HB Y CÍA",
+        nombre: "HB Y CIA",
         logo: BASE_URL + "/logo_hb.png",
-        color: "#1e40af"
+        color: "#1e40af",
+        pagina: "www.transportehb.com.co"
     },
     vehidiesel: {
         nombre: "Vehidiesel",
         logo: BASE_URL + "/logo_vehidiesel.png",
-        color: "#7f1d1d"
+        color: "#1e40af",
+        pagina: "www.vehidiesel.com.co"
     }
 };
 
@@ -209,6 +211,7 @@ function generarFirma() {
     const cargo = document.getElementById("cargo").value;
     const telefono = document.getElementById("telefono").value;
     const correo = document.getElementById("correo").value;
+    
 
     document.getElementById("firma").innerHTML = `
     <table cellpadding="0" cellspacing="0" style="font-family:Arial;font-size:12px;color:#000;">
@@ -221,7 +224,7 @@ function generarFirma() {
                 ${cargo}<br>
                 📞 ${telefono}<br>
                 ✉️ <a href="mailto:${correo}" style="color:${config[empresa].color};text-decoration:none;">${correo}</a><br>
-                <strong>${config[empresa].nombre}</strong>
+                <strong>${config[empresa].pagina}</strong>
             </td>
         </tr>
     </table>`;
@@ -243,3 +246,4 @@ async function copiarFirma() {
 
 </body>
 </html>
+
