@@ -4,344 +4,485 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Generador de Firmas Corporativas</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-    --bg: #0f172a;
-    --card: #ffffff;
-    --text: #0f172a;
-    --muted: #64748b;
-    --primary: #2563eb;
-    --success: #16a34a;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-1:#060d1a;
+  --bg-2:#0a1628;
+  --card-bg:rgba(255,255,255,0.97);
+  --card-border:rgba(255,255,255,0.08);
+  --text:#0f172a;
+  --text-secondary:#475569;
+  --muted:#94a3b8;
+  --primary:#2563eb;
+  --primary-light:#3b82f6;
+  --success:#16a34a;
+  --radius:20px;
+  --shadow:0 30px 80px rgba(0,0,0,0.5);
 }
-
-* {
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+body{
+  font-family:'Inter',-apple-system,sans-serif;
+  background:var(--bg-1);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  position:relative;
+  overflow-x:hidden;
 }
-
-body {
-    margin: 0;
-    background: linear-gradient(135deg, #0f172a, #020617);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 20%,rgba(37,99,235,0.12),transparent),
+    radial-gradient(ellipse 60% 50% at 80% 80%,rgba(99,102,241,0.08),transparent);
+  pointer-events:none;
+  z-index:0;
 }
-
-.app {
-    background: var(--card);
-    max-width: 1100px;
-    width: 100%;
-    border-radius: 18px;
-    box-shadow: 0 25px 80px rgba(0,0,0,.35);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
+.grid-bg{
+  position:fixed;
+  inset:0;
+  background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+  z-index:0;
 }
-
-@media (max-width: 900px) {
-    .app {
-        grid-template-columns: 1fr;
-    }
+.app{
+  position:relative;
+  z-index:1;
+  background:var(--card-bg);
+  backdrop-filter:blur(24px);
+  max-width:1160px;
+  width:100%;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  overflow:hidden;
+  animation:appear .6s ease-out;
 }
-
-.left {
-    padding: 40px;
+@keyframes appear{
+  from{opacity:0;transform:translateY(20px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
 }
-
-.right {
-    background: #f8fafc;
-    padding: 40px;
-    border-left: 1px solid #e5e7eb;
+@media(max-width:960px){
+  .app{grid-template-columns:1fr}
 }
-
-h1 {
-    margin: 0 0 10px;
-    font-size: 26px;
+/* ===== LEFT PANEL ===== */
+.left{
+  padding:44px 40px 36px;
+  position:relative;
 }
-
-h2 {
-    font-size: 18px;
-    margin: 25px 0 10px;
-    color: var(--primary);
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(37,99,235,0.1);
+  color:var(--primary);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.04em;
+  padding:5px 14px;
+  border-radius:100px;
+  margin-bottom:16px;
+  text-transform:uppercase;
 }
-
-p {
-    color: var(--muted);
-    margin-bottom: 30px;
+.left h1{
+  font-size:26px;
+  font-weight:700;
+  letter-spacing:-.02em;
+  color:var(--text);
+  margin-bottom:6px;
 }
-
-.group {
-    margin-bottom: 18px;
+.left>p{
+  color:var(--text-secondary);
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:28px;
 }
-
-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--muted);
+.group{
+  margin-bottom:16px;
 }
-
-input, select {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    margin-top: 6px;
-    font-size: 14px;
+.group label{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--text-secondary);
+  letter-spacing:.01em;
+  margin-bottom:5px;
 }
-
-input:focus, select:focus {
-    outline: none;
-    border-color: var(--primary);
+.group label .ico{
+  font-size:14px;
+  opacity:.6;
 }
-
-button {
-    width: 100%;
-    padding: 14px;
-    border-radius: 12px;
-    border: none;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
+input,select{
+  width:100%;
+  padding:11px 14px;
+  border-radius:10px;
+  border:1.5px solid #e5e7eb;
+  font-size:14px;
+  font-family:'Inter',sans-serif;
+  color:var(--text);
+  background:#fff;
+  transition:border-color .2s,box-shadow .2s;
+  outline:none;
 }
-
-.btn-primary {
-    background: var(--primary);
-    color: #fff;
-    margin-top: 10px;
+input::placeholder{color:#b0b8c4}
+input:focus,select:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(37,99,235,0.12);
 }
-
-.btn-copy {
-    background: var(--success);
-    color: #fff;
-    margin-top: 12px;
+.btn-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:24px;
 }
-
-.preview {
-    background: #fff;
-    border-radius: 14px;
-    border: 1px dashed #cbd5f5;
-    padding: 20px;
-    min-height: 150px;
+.btn{
+  padding:13px;
+  border-radius:11px;
+  border:none;
+  font-size:14px;
+  font-weight:600;
+  font-family:'Inter',sans-serif;
+  cursor:pointer;
+  transition:transform .15s,box-shadow .2s,opacity .2s;
 }
-
-.instructions {
-    background: #f1f5f9;
-    border-radius: 10px;
-    padding: 18px;
-    margin-top: 25px;
-    border-left: 4px solid var(--primary);
+.btn:active{transform:scale(.97)}
+.btn-primary{
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  color:#fff;
+  box-shadow:0 4px 16px rgba(37,99,235,0.3);
 }
-
-.instructions ol {
-    margin: 0;
-    padding-left: 20px;
+.btn-primary:hover{box-shadow:0 6px 24px rgba(37,99,235,0.4)}
+.btn-copy{
+  background:var(--success);
+  color:#fff;
+  box-shadow:0 4px 16px rgba(22,163,74,0.25);
 }
-
-.instructions li {
-    margin-bottom: 10px;
-    color: var(--text);
-    font-size: 13.5px;
+.btn-copy:hover{box-shadow:0 6px 24px rgba(22,163,74,0.35)}
+.btn-copy:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+/* ===== RIGHT PANEL ===== */
+.right{
+  background:#f8fafc;
+  padding:44px 40px 36px;
+  border-left:1px solid #e5e7eb;
 }
-
-.instructions strong {
-    color: var(--primary);
+.right h1{
+  font-size:22px;
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:4px;
 }
-
-.footer {
-    margin-top: 18px;
-    font-size: 12px;
-    color: var(--muted);
-    text-align: center;
+.right>p{
+  color:var(--text-secondary);
+  font-size:13.5px;
+  margin-bottom:20px;
 }
-
-.step-number {
-    display: inline-block;
-    width: 22px;
-    height: 22px;
-    background: var(--primary);
-    color: white;
-    border-radius: 50%;
-    text-align: center;
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 22px;
-    margin-right: 8px;
+.preview-wrap{
+  background:#fff;
+  border-radius:14px;
+  border:1.5px dashed #d1d9e6;
+  padding:24px 20px;
+  min-height:170px;
+  display:flex;
+  align-items:center;
+  transition:border-color .3s;
 }
-
-.important-note {
-    background: #fee2e2;
-    border: 1px solid #ef4444;
-    color: #991b1b;
-    padding: 12px;
-    border-radius: 8px;
-    margin-top: 15px;
-    font-size: 12.5px;
+.preview-wrap.filled{border-color:var(--primary);border-style:solid}
+.placeholder-msg{
+  width:100%;
+  text-align:center;
+  color:#b0b8c4;
+  font-size:13px;
+  line-height:1.6;
 }
+.placeholder-msg .big{font-size:32px;display:block;margin-bottom:8px}
+/* ===== INSTRUCTIONS CARD ===== */
+.instructions{
+  background:#fff;
+  border-radius:12px;
+  padding:18px 20px;
+  margin-top:20px;
+  border:1px solid #eef2f6;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.instructions h3{
+  font-size:13px;
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.instructions ol,.instructions ul{
+  margin:0;
+  padding-left:20px;
+}
+.instructions li{
+  margin-bottom:8px;
+  color:var(--text-secondary);
+  font-size:12.5px;
+  line-height:1.4;
+}
+.instructions li:last-child{margin-bottom:0}
+.instructions strong{color:var(--text)}
+.important-note{
+  background:#fef2f2;
+  border:1px solid #fecaca;
+  color:#991b1b;
+  padding:12px 14px;
+  border-radius:8px;
+  margin-top:14px;
+  font-size:12px;
+  line-height:1.5;
+}
+.important-note strong{color:#b91c1c}
+/* ===== TOAST ===== */
+#toast{
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:#1e293b;
+  color:#fff;
+  padding:14px 24px;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:500;
+  font-family:'Inter',sans-serif;
+  box-shadow:0 10px 40px rgba(0,0,0,.3);
+  z-index:999;
+  opacity:0;
+  transition:all .4s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+#toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+  pointer-events:auto;
+}
+#toast.error{background:#dc2626}
+#toast.success{background:var(--success)}
+/* ===== COMPANY COLORS ===== */
+.comp-hb{--company:#1e40af;--company-light:#3b82f6}
+.comp-vehidiesel{--company:#1e40af;--company-light:#3b82f6}
+.comp-vehimotors{--company:#b91c1c;--company-light:#ef4444}
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  body{padding:12px}
+  .left,.right{padding:28px 20px}
+  .left h1{font-size:22px}
+  .btn-row{grid-template-columns:1fr}
+}
+/* ===== PREVIEW FIRMA ===== */
+.preview-wrap table a{color:inherit}
 </style>
 </head>
-
 <body>
-
+<div class="grid-bg"></div>
 <div class="app">
 
-    <!-- FORMULARIO -->
-    <div class="left">
-        <h1>Generador de Firmas</h1>
-        <p>Crea tu firma corporativa en segundos. Compatible con Outlook, Web y Móvil.</p>
+  <!-- FORM -->
+  <div class="left">
+    <div class="badge"><span>&#9998;</span> Herramienta corporativa</div>
+    <h1>Generador de Firmas</h1>
+    <p>Crea tu firma profesional en segundos. Compatible con Outlook, Gmail y m&aacute;s.</p>
 
-        <div class="group">
-            <label>Empresa</label>
-            <select id="empresa">
-                <option value="hb">HB Y CÍA</option>
-                <option value="vehidiesel">Vehidiesel</option>
-            </select>
-        </div>
-
-        <div class="group">
-            <label>Nombre completo</label>
-            <input id="nombre" placeholder="Nombre">
-        </div>
-
-        <div class="group">
-            <label>Cargo</label>
-            <input id="cargo" placeholder="Cargo">
-        </div>
-
-        <div class="group">
-            <label>Teléfono</label>
-            <input id="telefono" placeholder="Teléfono">
-        </div>
-
-        <div class="group">
-            <label>Correo</label>
-            <input id="correo" placeholder="correo@empresa.com">
-        </div>
-
-        <button class="btn-primary" onclick="generarFirma()">Generar firma</button>
-        <button class="btn-copy" onclick="copiarFirma()">Copiar firma</button>
-        
-        <div class="instructions">
-            <h2>📌 Cómo pegar en Outlook de escritorio</h2>
-            <ol>
-                <li><span class="step-number">1</span> Genera tu firma con el botón superior</li>
-                <li><span class="step-number">2</span> Haz clic en <strong>Copiar firma</strong></li>
-                <li><span class="step-number">3</span> Abre Outlook en tu computador</li>
-                <li><span class="step-number">4</span> Ve a <strong>Archivo → Opciones → Correo</strong></li>
-                <li><span class="step-number">5</span> Haz clic en <strong>"Firmas..."</strong></li>
-                <li><span class="step-number">6</span> Crea una nueva firma o selecciona una existente</li>
-                <li><span class="step-number">7</span> Pega (Ctrl+V) en el área de edición</li>
-                <li><span class="step-number">8</span> Haz clic en <strong>Guardar</strong></li>
-            </ol>
-            
-            <div class="important-note">
-                <strong>⚠️ Importante:</strong> Si Outlook solicita descargar imágenes, haz clic en <strong>"Permitir"</strong> o <strong>"Descargar imágenes"</strong> para que el logo se muestre correctamente.
-            </div>
-        </div>
-        
+    <div class="group">
+      <label><span class="ico">&#127970;</span> Empresa</label>
+      <select id="empresa" onchange="onChange()">
+        <option value="hb">HB Y C&Iacute;A</option>
+        <option value="vehidiesel">Vehidiesel</option>
+        <option value="vehimotors">Vehimotors</option>
+      </select>
     </div>
 
-    <!-- PREVIEW -->
-    <div class="right">
-        <h1>Vista previa</h1>
-        <p>Así se verá tu firma en el correo.</p>
-
-        <div class="preview" id="firma">
-            <!-- La firma aparecerá aquí -->
-            <p style="color: #64748b; text-align: center; padding: 40px 0;">
-                Tu firma aparecerá aquí después de generarla
-            </p>
-        </div>
-        
-        <div class="instructions">
-            <h2>💡 Consejos para Outlook</h2>
-            <ul style="margin: 0; padding-left: 20px;">
-                <li>Usa <strong>Ctrl+V</strong> para pegar la firma</li>
-                <li>Asegúrate de tener conexión a internet para que se cargue el logo</li>
-                <li>Configura la firma como predeterminada para nuevos correjos</li>
-                <li>Prueba enviando un correo a ti mismo para verificar</li>
-            </ul>
-        </div>
+    <div class="group">
+      <label><span class="ico">&#128100;</span> Nombre completo</label>
+      <input id="nombre" placeholder="Ej: Carlos Andr&eacute;s P&eacute;rez" oninput="onChange()">
     </div>
+
+    <div class="group">
+      <label><span class="ico">&#128188;</span> Cargo</label>
+      <input id="cargo" placeholder="Ej: Gerente Comercial" oninput="onChange()">
+    </div>
+
+    <div class="group">
+      <label><span class="ico">&#128222;</span> Tel&eacute;fono</label>
+      <input id="telefono" placeholder="Ej: +57 300 123 4567" oninput="onChange()">
+    </div>
+
+    <div class="group">
+      <label><span class="ico">&#9993;</span> Correo</label>
+      <input id="correo" placeholder="Ej: correo@empresa.com" oninput="onChange()">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generarFirma()">Generar firma</button>
+      <button class="btn btn-copy" id="copyBtn" onclick="copiarFirma()" disabled>Copiar firma</button>
+    </div>
+
+    <div class="instructions">
+      <h3>&#128204; C&oacute;mo pegar en Outlook (escritorio)</h3>
+      <ol>
+        <li><strong>Genera</strong> tu firma con el bot&oacute;n superior</li>
+        <li>Haz clic en <strong>Copiar firma</strong></li>
+        <li>Abre Outlook y ve a <strong>Archivo &rarr; Opciones &rarr; Correo</strong></li>
+        <li>Haz clic en <strong>"Firmas..."</strong></li>
+        <li>Crea / selecciona una firma y <strong>pega (Ctrl+V)</strong></li>
+        <li>Haz clic en <strong>Guardar</strong></li>
+      </ol>
+      <div class="important-note">
+        <strong>&#9888;&#65039; Importante:</strong> Si Outlook solicita descargar im&aacute;genes, haz clic en <strong>"Permitir"</strong> para que el logo se muestre correctamente.
+      </div>
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="right">
+    <h1>Vista previa</h1>
+    <p>As&iacute; se ver&aacute; tu firma en los correos.</p>
+
+    <div class="preview-wrap" id="previewWrap">
+      <div class="preview" id="firma">
+        <div class="placeholder-msg">
+          <span class="big">&#128231;</span>
+          Completa los campos y haz clic en <strong>Generar firma</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="instructions">
+      <h3>&#128161; Consejos &uacute;tiles</h3>
+      <ul>
+        <li>Usa <strong>Ctrl+V</strong> para pegar la firma en Outlook</li>
+        <li>Requieres conexi&oacute;n a internet para que el logo se cargue</li>
+        <li>Configura la firma como <strong>predeterminada</strong> en Outlook</li>
+        <li>Env&iacute;ate un correo de prueba para verificar el resultado</li>
+      </ul>
+    </div>
+  </div>
 
 </div>
 
+<div id="toast"></div>
+
 <script>
-const BASE_URL = "https://generador-de-firmas.vercel.app";
+const BASE_URL = ".";
 
 const config = {
-    hb: {
-        nombre: "HB Y CIA",
-        logo: BASE_URL + "/logo_hb.png",
-        color: "#1e40af",
-        pagina: "www.transportehb.com.co"
-    },
-    vehidiesel: {
-        nombre: "Vehidiesel",
-        logo: BASE_URL + "/logo_vehidiesel.png",
-        color: "#1e40af",
-        pagina: "www.vehidiesel.com.co"
-    }
+  hb: {
+    nombre: "HB Y CIA",
+    logo: BASE_URL + "/logo_hb.png",
+    color: "#1e40af",
+    pagina: "www.transportehb.com.co",
+    mostrarPagina: true
+  },
+  vehidiesel: {
+    nombre: "Vehidiesel",
+    logo: BASE_URL + "/logo_vehidiesel.png",
+    color: "#1e40af",
+    pagina: "www.vehidiesel.com.co",
+    mostrarPagina: true
+  },
+  vehimotors: {
+    nombre: "Vehimotors",
+    logo: BASE_URL + "/logo_vehimotors.png",
+    color: "#b91c1c",
+    pagina: "",
+    mostrarPagina: false
+  }
 };
 
-function generarFirma() {
-    const empresa = document.getElementById("empresa").value;
-    const nombre = document.getElementById("nombre").value;
-    const cargo = document.getElementById("cargo").value;
-    const telefono = document.getElementById("telefono").value;
-    const correo = document.getElementById("correo").value;
-    
-    // Validar campos
-    if (!nombre || !cargo || !telefono || !correo) {
-        alert("Por favor completa todos los campos antes de generar la firma.");
-        return;
-    }
+let firmaGenerada = false;
 
-    document.getElementById("firma").innerHTML = `
-    <table cellpadding="0" cellspacing="0" style="font-family:Arial, sans-serif;font-size:12px;color:#000; border-collapse: collapse;">
-        <tr>
-            <td style="padding-right:15px;vertical-align:top; border-right: 1px solid #e5e7eb;">
-                <img src="${config[empresa].logo}" width="120" alt="Logo ${config[empresa].nombre}" style="display:block;">
-            </td>
-            <td style="padding-left:15px;vertical-align:top;">
-                <strong style="font-size:14px;color:${config[empresa].color}; display:block; margin-bottom:4px;">${nombre}</strong>
-                <span style="color:#4b5563; display:block; margin-bottom:4px;">${cargo}</span>
-                <span style="color:#4b5563; display:block; margin-bottom:2px;">📞 ${telefono}</span>
-                <span style="color:#4b5563; display:block; margin-bottom:2px;">✉️ <a href="mailto:${correo}" style="color:${config[empresa].color};text-decoration:none;">${correo}</a></span>
-                <strong style="color:${config[empresa].color}; display:block; margin-top:6px;">${config[empresa].pagina}</strong>
-            </td>
-        </tr>
-    </table>`;
+function toast(msg, type) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "show" + (type ? " " + type : "");
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove("show"), 3500);
+}
+
+function onChange() {
+  const nombre = document.getElementById("nombre").value.trim();
+  const cargo = document.getElementById("cargo").value.trim();
+  const telefono = document.getElementById("telefono").value.trim();
+  const correo = document.getElementById("correo").value.trim();
+  const copyBtn = document.getElementById("copyBtn");
+  if (nombre && cargo && telefono && correo) {
+    copyBtn.disabled = false;
+  } else {
+    copyBtn.disabled = true;
+  }
+}
+
+function generarFirma() {
+  const empresa = document.getElementById("empresa").value;
+  const nombre = document.getElementById("nombre").value.trim();
+  const cargo = document.getElementById("cargo").value.trim();
+  const telefono = document.getElementById("telefono").value.trim();
+  const correo = document.getElementById("correo").value.trim();
+
+  if (!nombre || !cargo || !telefono || !correo) {
+    toast("Completa todos los campos antes de generar.", "error");
+    return;
+  }
+
+  const c = config[empresa];
+
+  document.getElementById("firma").innerHTML = `
+  <table cellpadding="0" cellspacing="0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#1e293b;border-collapse:collapse;width:100%;max-width:500px">
+    <tr>
+      <td style="padding-right:16px;vertical-align:middle;width:120px">
+        <img src="${c.logo}" width="120" alt="${c.nombre}" style="display:block;max-width:120px;height:auto">
+      </td>
+      <td style="padding-left:16px;vertical-align:middle;border-left:2px solid ${c.color}">
+        <div style="font-size:15px;font-weight:700;color:${c.color};margin-bottom:2px">${nombre}</div>
+        <div style="color:#475569;margin-bottom:2px">${cargo}</div>
+        <div style="color:#64748b;margin-bottom:1px">${telefono}</div>
+        <div style="margin-bottom:1px"><a href="mailto:${correo}" style="color:${c.color};text-decoration:none">${correo}</a></div>
+        ${c.mostrarPagina ? `<div style="font-weight:600;color:${c.color};margin-top:5px;font-size:11px">${c.pagina}</div>` : ''}
+      </td>
+    </tr>
+  </table>`;
+
+  document.getElementById("previewWrap").classList.add("filled");
+  firmaGenerada = true;
+  toast("Firma generada correctamente.", "success");
 }
 
 async function copiarFirma() {
-    const firma = document.getElementById("firma").innerHTML;
-    
-    // Validar que se haya generado una firma
-    if (firma.includes("Tu firma aparecerá aquí")) {
-        alert("Por favor, genera primero tu firma haciendo clic en 'Generar firma'.");
-        return;
-    }
-    
-    try {
-        await navigator.clipboard.write([
-            new ClipboardItem({
-                "text/html": new Blob([firma], { type: "text/html" }),
-                "text/plain": new Blob([firma.replace(/<[^>]*>/g, "")], { type: "text/plain" })
-            })
-        ]);
+  if (!firmaGenerada) {
+    toast("Primero genera la firma.", "error");
+    return;
+  }
 
-        alert("✅ Firma copiada correctamente al portapapeles.\n\nAhora sigue estos pasos:\n1. Abre Outlook\n2. Ve a Archivo → Opciones → Correo\n3. Haz clic en 'Firmas...'\n4. Pega (Ctrl+V) en el área de edición\n5. Haz clic en Guardar");
-    } catch (err) {
-        console.error("Error al copiar:", err);
-        alert("Hubo un error al copiar la firma. Inténtalo de nuevo.");
-    }
+  const html = document.getElementById("firma").innerHTML;
+  const text = html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+
+  try {
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        "text/html": new Blob([html], { type: "text/html" }),
+        "text/plain": new Blob([text], { type: "text/plain" })
+      })
+    ]);
+    toast("Firma copiada al portapapeles.", "success");
+  } catch (err) {
+    toast("Error al copiar. Intenta de nuevo.", "error");
+  }
 }
 </script>
-
 </body>
 </html>
