@@ -277,6 +277,7 @@ input:focus,select:focus{
 .comp-hb{--company:#1e40af;--company-light:#3b82f6}
 .comp-vehidiesel{--company:#1e40af;--company-light:#3b82f6}
 .comp-vehimotors{--company:#b91c1c;--company-light:#ef4444}
+.comp-vehimotors-ctg{--company:#1e40af;--company-light:#3b82f6}
 /* ===== RESPONSIVE ===== */
 @media(max-width:600px){
   body{padding:12px}
@@ -304,6 +305,7 @@ input:focus,select:focus{
         <option value="hb">HB Y C&Iacute;A</option>
         <option value="vehidiesel">Vehidiesel</option>
         <option value="vehimotors">Vehimotors</option>
+        <option value="vehimotors_ctg">Vehimotors Cartagena</option>
       </select>
     </div>
 
@@ -399,6 +401,13 @@ const config = {
     nombre: "Vehimotors",
     logo: BASE_URL + "/logo_vehimotors.png",
     color: "#b91c1c",
+    pagina: "",
+    mostrarPagina: false
+  },
+  vehimotors_ctg: {
+    nombre: "Vehimotors Cartagena",
+    logo: BASE_URL + "/vehimotors_ctg.png",
+    color: "#1e40af",
     pagina: "",
     mostrarPagina: false
   }
